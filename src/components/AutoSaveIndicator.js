@@ -1,18 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 function AutoSaveIndicator({ show }) {
   const [visible, setVisible] = useState(false);
   
+  // Use useCallback to memoize the visibility setting logic
+  const updateVisibility = useCallback((isVisible) => {
+    setVisible(isVisible);
+  }, []);
+  
   useEffect(() => {
     if (show) {
-      setVisible(true);
+      updateVisibility(true);
       const timer = setTimeout(() => {
-        setVisible(false);
+        updateVisibility(false);
       }, 2000);
       
       return () => clearTimeout(timer);
     }
-  }, [show]);
+  }, [show, updateVisibility]);
   
   if (!visible) return null;
   
@@ -23,4 +28,4 @@ function AutoSaveIndicator({ show }) {
   );
 }
 
-export default AutoSaveIndicator;
+export default React.memo(AutoSaveIndicator);
