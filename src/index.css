@@ -1,0 +1,44 @@
+:root {
+  --bg-color: #f9f9f9;
+  --text-color: #333;
+  --card-bg-color: #fff;
+  --card-border-color: #ddd;
+  --form-bg-color: #f5f5f5;
+  --button-primary-bg: #4caf50;
+  --button-primary-hover: #45a049;
+  --button-secondary-bg: #2196F3;
+  --button-secondary-hover: #0b7dda;
+  --button-danger-bg: #f44336;
+  --button-danger-hover: #d32f2f;
+}
+
+body.dark-mode {
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --card-bg-color: #1e1e1e;
+  --card-border-color: #333;
+  --form-bg-color: #2d2d2d;
+  --button-primary-bg: #388e3c;
+  --button-primary-hover: #2e7d32;
+  --button-secondary-bg: #1976d2;
+  --button-secondary-hover: #1565c0;
+  --button-danger-bg: #d32f2f;
+  --button-danger-hover: #c62828;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
