@@ -27,14 +27,20 @@ function App() {
   
   // Load tasks from localStorage on initial render
   useEffect(() => {
-    const savedTasks = localStorage.getItem('tasks');
-    const parsedTasks = savedTasks ? JSON.parse(savedTasks) : [];
-    
-    // Initialize task stats
-    const completedTasks = parsedTasks.filter(task => task.completed);
-    taskStats.current.completedCount = completedTasks.length;
-    
-    dispatch({ type: TASK_ACTIONS.INITIALIZE, payload: parsedTasks });
+    try {
+      const savedTasks = localStorage.getItem('tasks');
+      const parsedTasks = savedTasks ? JSON.parse(savedTasks) : [];
+      
+      // Initialize task stats
+      const completedTasks = parsedTasks.filter(task => task.completed);
+      taskStats.current.completedCount = completedTasks.length;
+      
+      dispatch({ type: TASK_ACTIONS.INITIALIZE, payload: parsedTasks });
+    } catch (error) {
+      console.error('Error loading tasks from localStorage:', error);
+      // Fallback to empty tasks array
+      dispatch({ type: TASK_ACTIONS.INITIALIZE, payload: [] });
+    }
   }, []);
   
   // Use useMemo to compute filtered tasks only when tasks or filter changes
@@ -70,28 +76,32 @@ function App() {
       return;
     }
     
-    // Update stats without triggering re-renders
-    if (taskStatistics.completed > taskStats.current.completedCount) {
-      taskStats.current.lastCompletedAt = new Date().toLocaleTimeString();
-    }
-    taskStats.current.completedCount = taskStatistics.completed;
-    
-    // Save tasks to localStorage
-    localStorage.setItem('tasks', JSON.stringify(taskState.tasks));
-    setIsSaving(true);
-    
-    // Show alert when tasks are updated
-    let message = `Task list updated! ${taskStatistics.completed} of ${taskStatistics.total} tasks completed.`;
-    if (taskStats.current.lastCompletedAt) {
-      message += ` Last task completed at ${taskStats.current.lastCompletedAt}`;
-    }
-    alert(message);
-    
-    const timer = setTimeout(() => {
+    try {
+      // Update stats without triggering re-renders
+      if (taskStatistics.completed > taskStats.current.completedCount) {
+        taskStats.current.lastCompletedAt = new Date().toLocaleTimeString();
+      }
+      taskStats.current.completedCount = taskStatistics.completed;
+      
+      // Save tasks to localStorage
+      localStorage.setItem('tasks', JSON.stringify(taskState.tasks));
+      setIsSaving(true);
+      
+      // Rather than using alert, which might cause issues in deployment
+      console.log(`Task list updated! ${taskStatistics.completed} of ${taskStatistics.total} tasks completed.`);
+      if (taskStats.current.lastCompletedAt) {
+        console.log(`Last task completed at ${taskStats.current.lastCompletedAt}`);
+      }
+      
+      const timer = setTimeout(() => {
+        setIsSaving(false);
+      }, 1000);
+      
+      return () => clearTimeout(timer);
+    } catch (error) {
+      console.error('Error saving tasks to localStorage:', error);
       setIsSaving(false);
-    }, 1000);
-    
-    return () => clearTimeout(timer);
+    }
   }, [taskState.tasks, isInitialRender, taskStatistics]);
   
   // Optimize action handlers with useCallback
