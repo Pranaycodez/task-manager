@@ -2,8 +2,8 @@ import React, { useReducer, useEffect, useContext, useState, useRef, useMemo, us
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
 import TaskFilter from './components/TaskFilter';
-// Removed AutoSaveIndicator import
-import ThemeToggle from './components/ThemeToggle';
+// Removed AutoSaveIndicator importts/ThemeToggle';
+import DebugInfo from './components/DebugInfo';
 import { ThemeContext } from './contexts/ThemeContext';
 import { taskReducer, initialTaskState, TASK_ACTIONS } from './reducers/taskReducer';
 import './App.css';
@@ -85,21 +85,16 @@ function App() {
       // Save tasks to localStorage
       localStorage.setItem('tasks', JSON.stringify(taskState.tasks));
       // Removed setIsSaving(true) line
-      
+      console.log(`Task list updated! ${taskStatistics.completed} of ${taskStatistics.total} tasks completed.`);
       // Rather than using alert, which might cause issues in deployment
       console.log(`Task list updated! ${taskStatistics.completed} of ${taskStatistics.total} tasks completed.`);
       if (taskStats.current.lastCompletedAt) {
         console.log(`Last task completed at ${taskStats.current.lastCompletedAt}`);
-      }
+      }onsole.error('Error saving tasks to localStorage:', error);
       
-      // Removed the timer and setIsSaving(false)
+      // Removed the timer and setIsSaving(false)stics]);
     } catch (error) {
       console.error('Error saving tasks to localStorage:', error);
-      // Removed setIsSaving(false)
-    }
-  }, [taskState.tasks, isInitialRender, taskStatistics]);
-  
-  // Optimize action handlers with useCallback
   const addTask = useCallback((taskData) => {
     const newTask = {
       ...taskData,
@@ -139,36 +134,37 @@ function App() {
         <ThemeToggle />
       </div>
       <div className="app-content">
-        <TaskForm onAddTask={addTask} />
+          <span className="header-icon">✅</span>dTask} />
+          <h1>Task Manager</h1>ilter 
+        </div>={taskState.filter}
+        <ThemeToggle />FilterChange={filterTasks}
+      </div>
+      <div className="app-content">
+        <TaskForm onAddTask={addTask} />tistics - using memoized values */}
         <TaskFilter 
           currentFilter={taskState.filter}
-          onFilterChange={filterTasks}
-        />
-        
+          onFilterChange={filterTasks}  <strong>Progress: {taskStatistics.percentComplete}%</strong> ({taskStatistics.completed} of {taskStatistics.total} tasks completed)
+        />    {taskStats.current.lastCompletedAt && 
+        pleted at {taskStats.current.lastCompletedAt}</span>}
         {/* Task Statistics - using memoized values */}
-        <div className="stats-display">
+        <div className="stats-display">v className="progress-bar">
           <p>
             <strong>Progress: {taskStatistics.percentComplete}%</strong> ({taskStatistics.completed} of {taskStatistics.total} tasks completed)
             {taskStats.current.lastCompletedAt && 
-              <span className="last-completed">Last completed at {taskStats.current.lastCompletedAt}</span>}
+              <span className="last-completed">Last completed at {taskStats.current.lastCompletedAt}</span>}/div>
           </p>
           <div className="progress-bar">
             <div 
               className="progress-fill" 
-              style={{ width: `${taskStatistics.percentComplete}%` }}
-            ></div>
-          </div>
-        </div>
+              style={{ width: `${taskStatistics.percentComplete}%` }}lteredTasks}
+            ></div>veTask={removeTask}
+          </div>ggleCompletion={toggleTaskCompletion}
+        </div>  onUpdateTask={updateTaskDetails}
         
         <TaskList 
           tasks={filteredTasks}
           onRemoveTask={removeTask}
           onToggleCompletion={toggleTaskCompletion}
           onUpdateTask={updateTaskDetails}
-        />
-      </div>
-    </div>
-  );
-}
-
+        />lt App;      </div>    </div>  );}
 export default App;
