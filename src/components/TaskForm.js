@@ -39,10 +39,10 @@ function TaskForm({ onAddTask }) {
 
   return (
     <form onSubmit={handleSubmit} className="task-form">
-      <h2>Add New Task</h2>
+      <h2>✨ Add New Task</h2>
       
       <div className="form-control">
-        <label htmlFor="title">Title:</label>
+        <label htmlFor="title">📌 Title:</label>
         <input
           type="text"
           id="title"
@@ -50,25 +50,25 @@ function TaskForm({ onAddTask }) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Enter task title"
+          placeholder="What needs to be done?"
           required
         />
-        <small className="form-hint">Press Ctrl+Enter for quick add</small>
+        <small className="form-hint">⌨️ Press Ctrl+Enter for quick add</small>
       </div>
       
       <div className="form-control">
-        <label htmlFor="description">Description:</label>
+        <label htmlFor="description">📝 Description:</label>
         <textarea
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Enter task description (optional)"
+          placeholder="Add details about this task..."
           rows="3"
         />
       </div>
       
-      <button type="submit">Add Task</button>
+      <button type="submit">➕ Add Task</button>
     </form>
   );
 }

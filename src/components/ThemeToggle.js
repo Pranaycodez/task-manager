@@ -10,7 +10,8 @@ function ThemeToggle() {
       onClick={toggleTheme}
       aria-label={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
     >
-      {darkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+      {darkMode ? '☀️' : '🌙'}
+      <span className="toggle-text">{darkMode ? 'Light' : 'Dark'}</span>
     </button>
   );
 }

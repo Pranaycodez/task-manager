@@ -16,13 +16,13 @@ function TaskFilter({ currentFilter, onFilterChange }) {
   
   return (
     <div className="task-filter">
-      <span>Filter: </span>
+      <span>🔍 Filter: </span>
       <div className="filter-buttons">
         <button 
           className={`filter-btn ${currentFilter === 'all' ? 'active' : ''}`}
           onClick={handleAllClick}
         >
-          All
+          All Tasks
         </button>
         <button 
           className={`filter-btn ${currentFilter === 'active' ? 'active' : ''}`}

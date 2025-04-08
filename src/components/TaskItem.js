@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import './TaskItem.css'; // Add this import for the CSS styles
 
 function TaskItem({ task, onRemove, onToggleCompletion, onUpdate }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -63,6 +64,8 @@ function TaskItem({ task, onRemove, onToggleCompletion, onUpdate }) {
               ref={editTitleInputRef}
               value={editTitle}
               onChange={(e) => setEditTitle(e.target.value)}
+              className="input-field"
+              placeholder="Task title"
             />
           </div>
           <div className="form-control">
@@ -72,11 +75,17 @@ function TaskItem({ task, onRemove, onToggleCompletion, onUpdate }) {
               value={editDescription}
               onChange={(e) => setEditDescription(e.target.value)}
               rows="3"
+              className="textarea-field"
+              placeholder="Add description (optional)"
             />
           </div>
           <div className="edit-actions">
-            <button onClick={handleUpdate} className="save-btn">Save</button>
-            <button onClick={handleCancel} className="cancel-btn">Cancel</button>
+            <button onClick={handleUpdate} className="btn save-btn">
+              <span className="btn-icon">✓</span> Save
+            </button>
+            <button onClick={handleCancel} className="btn cancel-btn">
+              <span className="btn-icon">✕</span> Cancel
+            </button>
           </div>
         </div>
       </div>
@@ -87,31 +96,34 @@ function TaskItem({ task, onRemove, onToggleCompletion, onUpdate }) {
   return (
     <div className={`task-item ${task.completed ? 'completed' : ''}`}>
       <div className="task-content">
-        <h3>{task.title}</h3>
-        {task.description && <p>{task.description}</p>}
-        <p className="task-status">
-          Status: {task.completed ? 'Completed' : 'Pending'}
-        </p>
+        <div className="task-header">
+          <h3 className="task-title">{task.title}</h3>
+          <span className={`status-badge ${task.completed ? 'completed-badge' : 'pending-badge'}`}>
+            {task.completed ? 'Completed' : 'Pending'}
+          </span>
+        </div>
+        {task.description && <p className="task-description">{task.description}</p>}
       </div>
       
       <div className="task-actions">
         <button 
-          className="toggle-btn"
+          className={`btn toggle-btn ${task.completed ? 'undo-btn' : 'complete-btn'}`}
           onClick={handleToggleClick}
         >
-          {task.completed ? 'Mark Incomplete' : 'Mark Complete'}
+          <span className="btn-icon">{task.completed ? '↩' : '✓'}</span>
+          {task.completed ? 'Undo' : 'Complete'}
         </button>
         <button 
-          className="edit-btn"
+          className="btn edit-btn"
           onClick={handleEditClick}
         >
-          Edit
+          <span className="btn-icon">✎</span> Edit
         </button>
         <button 
-          className="delete-btn"
+          className="btn delete-btn"
           onClick={handleDeleteClick}
         >
-          Delete
+          <span className="btn-icon">🗑</span> Delete
         </button>
       </div>
     </div>

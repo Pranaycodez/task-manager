@@ -2,11 +2,10 @@ import React, { useReducer, useEffect, useContext, useState, useRef, useMemo, us
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
 import TaskFilter from './components/TaskFilter';
-import AutoSaveIndicator from './components/AutoSaveIndicator';
+// Removed AutoSaveIndicator import
 import ThemeToggle from './components/ThemeToggle';
 import { ThemeContext } from './contexts/ThemeContext';
 import { taskReducer, initialTaskState, TASK_ACTIONS } from './reducers/taskReducer';
-import PerformanceMonitor from './components/PerformanceMonitor';
 import './App.css';
 
 function App() {
@@ -16,7 +15,7 @@ function App() {
   // Replace useState with useReducer for task management
   const [taskState, dispatch] = useReducer(taskReducer, initialTaskState);
   
-  const [isSaving, setIsSaving] = useState(false);
+  // Removed isSaving state
   const [isInitialRender, setIsInitialRender] = useState(true);
   
   // Use useRef to keep track of task completion stats without re-rendering
@@ -85,7 +84,7 @@ function App() {
       
       // Save tasks to localStorage
       localStorage.setItem('tasks', JSON.stringify(taskState.tasks));
-      setIsSaving(true);
+      // Removed setIsSaving(true) line
       
       // Rather than using alert, which might cause issues in deployment
       console.log(`Task list updated! ${taskStatistics.completed} of ${taskStatistics.total} tasks completed.`);
@@ -93,14 +92,10 @@ function App() {
         console.log(`Last task completed at ${taskStats.current.lastCompletedAt}`);
       }
       
-      const timer = setTimeout(() => {
-        setIsSaving(false);
-      }, 1000);
-      
-      return () => clearTimeout(timer);
+      // Removed the timer and setIsSaving(false)
     } catch (error) {
       console.error('Error saving tasks to localStorage:', error);
-      setIsSaving(false);
+      // Removed setIsSaving(false)
     }
   }, [taskState.tasks, isInitialRender, taskStatistics]);
   
@@ -137,39 +132,41 @@ function App() {
   return (
     <div className={`app ${darkMode ? 'dark-mode' : ''}`}>
       <div className="app-header">
-        <h1>Task Manager</h1>
+        <div className="header-title">
+          <span className="header-icon">✅</span>
+          <h1>Task Manager</h1>
+        </div>
         <ThemeToggle />
       </div>
-      <AutoSaveIndicator show={isSaving} />
-      <TaskForm onAddTask={addTask} />
-      <TaskFilter 
-        currentFilter={taskState.filter}
-        onFilterChange={filterTasks}
-      />
-      
-      {/* Task Statistics - using memoized values */}
-      <div className="stats-display">
-        <p>
-          <strong>Progress: {taskStatistics.percentComplete}%</strong> ({taskStatistics.completed} of {taskStatistics.total} tasks completed)
-          {taskStats.current.lastCompletedAt && 
-            <span className="last-completed"> Last completed at {taskStats.current.lastCompletedAt}</span>}
-        </p>
-        <div className="progress-bar">
-          <div 
-            className="progress-fill" 
-            style={{ width: `${taskStatistics.percentComplete}%` }}
-          ></div>
+      <div className="app-content">
+        <TaskForm onAddTask={addTask} />
+        <TaskFilter 
+          currentFilter={taskState.filter}
+          onFilterChange={filterTasks}
+        />
+        
+        {/* Task Statistics - using memoized values */}
+        <div className="stats-display">
+          <p>
+            <strong>Progress: {taskStatistics.percentComplete}%</strong> ({taskStatistics.completed} of {taskStatistics.total} tasks completed)
+            {taskStats.current.lastCompletedAt && 
+              <span className="last-completed">Last completed at {taskStats.current.lastCompletedAt}</span>}
+          </p>
+          <div className="progress-bar">
+            <div 
+              className="progress-fill" 
+              style={{ width: `${taskStatistics.percentComplete}%` }}
+            ></div>
+          </div>
         </div>
+        
+        <TaskList 
+          tasks={filteredTasks}
+          onRemoveTask={removeTask}
+          onToggleCompletion={toggleTaskCompletion}
+          onUpdateTask={updateTaskDetails}
+        />
       </div>
-      
-      <TaskList 
-        tasks={filteredTasks}
-        onRemoveTask={removeTask}
-        onToggleCompletion={toggleTaskCompletion}
-        onUpdateTask={updateTaskDetails}
-      />
-      
-      <PerformanceMonitor />
     </div>
   );
 }
